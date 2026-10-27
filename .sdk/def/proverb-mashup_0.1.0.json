@@ -1,0 +1,806 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Proverb Mashup",
+    "version": "1.0.0",
+    "description": "Mashups made by gluing the first half of one real proverb to the second half of another (halves only meet halves of the same join kind), plus the 227 Romanian and 335 English real proverbs themselves, each with its source, from the api.tasta.space hub. Proverb wording comes from Wikiquote and Wiktionary under CC BY-SA 4.0. GET only, JSON in a {\"data\": ...} envelope, no key needed (anonymous callers get 30 requests a minute and 1,000 a day per IP, shared across every API on the hub).\n\nSources: the documentation page https://api.tasta.space/proverbs and the hub rules at https://api.tasta.space/docs, with every modelled endpoint probed live on 2026-10-23 (random and seeded mashups, today's mashup with and without lang, a random proverb, ro/88, a 404 id, the list filtered by lang and by join kind with paging).\n\nNot modelled: format=text (one plain-text line, on mashup, today, random and {lang}/{id}) and /proverbs/mashup/card, which returns a PNG or SVG image rather than JSON."
+  },
+  "externalDocs": {
+    "description": "Proverb mashup on api.tasta.space",
+    "url": "https://api.tasta.space/proverbs"
+  },
+  "servers": [
+    {
+      "url": "https://api.tasta.space/v1"
+    }
+  ],
+  "paths": {
+    "/proverbs": {
+      "get": {
+        "operationId": "listProverbs",
+        "summary": "List the real proverbs",
+        "description": "Every real proverb, a page at a time, with the join kinds and their counts in meta.",
+        "parameters": [
+          {
+            "name": "lang",
+            "in": "query",
+            "required": false,
+            "description": "Only this language; left out, both.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ro",
+                "en"
+              ]
+            },
+            "example": "en"
+          },
+          {
+            "name": "join",
+            "in": "query",
+            "required": false,
+            "description": "Only this join kind.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "cine",
+                "ce",
+                "noun",
+                "plural",
+                "cond",
+                "imp",
+                "pair",
+                "verbless",
+                "decat",
+                "front",
+                "subject",
+                "who",
+                "condition",
+                "adverbial",
+                "than",
+                "there",
+                "imperative",
+                "the_more",
+                "as_so"
+              ]
+            },
+            "example": "cine"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "description": "Page number, from 1.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            },
+            "example": 2
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "required": false,
+            "description": "Proverbs per page, 1 to 100.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 50
+            },
+            "example": 20
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A page of proverbs.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Proverb"
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "page": {
+                          "type": "integer",
+                          "example": 2
+                        },
+                        "per_page": {
+                          "type": "integer",
+                          "example": 20
+                        },
+                        "total": {
+                          "type": "integer",
+                          "description": "Proverbs matching the filters.",
+                          "example": 335
+                        },
+                        "last_page": {
+                          "type": "integer",
+                          "example": 17
+                        },
+                        "filters": {
+                          "type": "object",
+                          "description": "The filters applied; empty when none.",
+                          "properties": {
+                            "lang": {
+                              "type": "string",
+                              "example": "en"
+                            },
+                            "join": {
+                              "type": "string",
+                              "example": "cine"
+                            }
+                          }
+                        },
+                        "joins": {
+                          "type": "object",
+                          "description": "Join kinds by language (ro, en), each a map from join kind to its shape and count. Only the filtered language when lang is given.",
+                          "additionalProperties": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "$ref": "#/components/schemas/JoinKind"
+                            }
+                          }
+                        },
+                        "licence": {
+                          "type": "string",
+                          "example": "CC BY-SA 4.0, like the pages they come from. Each proverb names its source."
+                        }
+                      },
+                      "required": [
+                        "page",
+                        "per_page",
+                        "total",
+                        "last_page",
+                        "filters",
+                        "joins",
+                        "licence"
+                      ]
+                    },
+                    "links": {
+                      "type": "object",
+                      "description": "Pagination links.",
+                      "properties": {
+                        "next": {
+                          "type": "string",
+                          "description": "URL of the next page, or null on the last page.",
+                          "nullable": true
+                        },
+                        "prev": {
+                          "type": "string",
+                          "description": "URL of the previous page, or null on the first page.",
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "next",
+                        "prev"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "meta",
+                    "links"
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "invalid_parameter: a language that does not exist, a malformed seed, a join kind that does not exist, a page that is not a number.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Anonymous limit reached (30 a minute, 1,000 a day per IP across the whole api.tasta.space hub); see Retry-After.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/proverbs/mashup": {
+      "get": {
+        "operationId": "getMashup",
+        "summary": "A proverb mashup",
+        "description": "A mashup, its two halves, the two real proverbs it came from, a seed and a permalink.",
+        "parameters": [
+          {
+            "name": "lang",
+            "in": "query",
+            "required": false,
+            "description": "ro or en. Left out, the seed (or chance) picks one.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ro",
+                "en"
+              ]
+            },
+            "example": "en"
+          },
+          {
+            "name": "seed",
+            "in": "query",
+            "required": false,
+            "description": "1 to 64 letters, digits, - or _. The same seed gives the same mashup on every call. Left out, a new one is made and echoed back.",
+            "schema": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]{1,64}$"
+            },
+            "example": "k3f9"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The mashup.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Mashup"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "invalid_parameter: a language that does not exist, a malformed seed, a join kind that does not exist, a page that is not a number.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Anonymous limit reached (30 a minute, 1,000 a day per IP across the whole api.tasta.space hub); see Retry-After.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/proverbs/today": {
+      "get": {
+        "operationId": "getTodayMashup",
+        "summary": "The mashup of the day",
+        "description": "The mashup of the day, the same for everyone until midnight in Bucharest. Its seed is the date.",
+        "parameters": [
+          {
+            "name": "lang",
+            "in": "query",
+            "required": false,
+            "description": "ro or en. Left out, the seed (or chance) picks one.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ro",
+                "en"
+              ]
+            },
+            "example": "en"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Today's mashup.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Mashup"
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "day": {
+                          "type": "string",
+                          "description": "The day, in Bucharest.",
+                          "format": "date",
+                          "example": "2026-10-23"
+                        },
+                        "timezone": {
+                          "type": "string",
+                          "example": "Europe/Bucharest"
+                        }
+                      },
+                      "required": [
+                        "day",
+                        "timezone"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "meta"
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "invalid_parameter: a language that does not exist, a malformed seed, a join kind that does not exist, a page that is not a number.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Anonymous limit reached (30 a minute, 1,000 a day per IP across the whole api.tasta.space hub); see Retry-After.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/proverbs/random": {
+      "get": {
+        "operationId": "getRandomProverb",
+        "summary": "A random real proverb",
+        "description": "One real proverb, untouched.",
+        "parameters": [
+          {
+            "name": "lang",
+            "in": "query",
+            "required": false,
+            "description": "ro or en; left out, either.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ro",
+                "en"
+              ]
+            },
+            "example": "en"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The proverb.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Proverb"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "invalid_parameter: a language that does not exist, a malformed seed, a join kind that does not exist, a page that is not a number.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Anonymous limit reached (30 a minute, 1,000 a day per IP across the whole api.tasta.space hub); see Retry-After.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/proverbs/{lang}/{id}": {
+      "get": {
+        "operationId": "getProverb",
+        "summary": "One real proverb by id",
+        "description": "One real proverb by language and id, with its halves, its join kind and its source.",
+        "parameters": [
+          {
+            "name": "lang",
+            "in": "path",
+            "required": true,
+            "description": "Language: ro or en.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ro",
+                "en"
+              ]
+            },
+            "example": "ro"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Proverb id within that language.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "example": 88
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The proverb.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Proverb"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "not_found: no proverb with that id in that language.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "invalid_parameter: a language that does not exist, a malformed seed, a join kind that does not exist, a page that is not a number.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Anonymous limit reached (30 a minute, 1,000 a day per IP across the whole api.tasta.space hub); see Retry-After.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Mashup": {
+        "type": "object",
+        "description": "The first half of one real proverb glued to the second half of another.",
+        "properties": {
+          "lang": {
+            "type": "string",
+            "description": "Language of the mashup.",
+            "enum": [
+              "ro",
+              "en"
+            ],
+            "example": "en"
+          },
+          "mashup": {
+            "type": "string",
+            "description": "The mashup: the two halves joined by one space.",
+            "example": "As the old cock crows, so shall you reap."
+          },
+          "halves": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The two halves, first then second."
+          },
+          "join": {
+            "type": "string",
+            "description": "The join kind both halves share (see /proverbs meta.joins).",
+            "enum": [
+              "cine",
+              "ce",
+              "noun",
+              "plural",
+              "cond",
+              "imp",
+              "pair",
+              "verbless",
+              "decat",
+              "front",
+              "subject",
+              "who",
+              "condition",
+              "adverbial",
+              "than",
+              "there",
+              "imperative",
+              "the_more",
+              "as_so"
+            ],
+            "example": "as_so"
+          },
+          "from": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Origin"
+            },
+            "description": "The two real proverbs it came from: the one that gave the first half, then the one that gave the second."
+          },
+          "seed": {
+            "type": "string",
+            "description": "The seed; the same seed and lang always give the same mashup. For /today it is the date.",
+            "example": "k3f9"
+          },
+          "permalink": {
+            "type": "string",
+            "description": "Link that reproduces this mashup.",
+            "example": "https://api.tasta.space/v1/proverbs/mashup?lang=en&seed=k3f9"
+          },
+          "card": {
+            "type": "string",
+            "description": "Link to a 1200x630 share card (PNG, or format=svg). Not a JSON endpoint.",
+            "example": "https://api.tasta.space/v1/proverbs/mashup/card?lang=en&seed=k3f9&format=png"
+          }
+        },
+        "required": [
+          "lang",
+          "mashup",
+          "halves",
+          "join",
+          "from",
+          "seed",
+          "permalink",
+          "card"
+        ]
+      },
+      "Origin": {
+        "type": "object",
+        "description": "One of the two real proverbs a mashup was glued from.",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Id of the real proverb within its language.",
+            "example": 298
+          },
+          "text": {
+            "type": "string",
+            "description": "The whole real proverb.",
+            "example": "As the old cock crows, so crows the young."
+          },
+          "half": {
+            "type": "string",
+            "description": "Which half of it the mashup took.",
+            "enum": [
+              "first",
+              "second"
+            ],
+            "example": "first"
+          },
+          "url": {
+            "type": "string",
+            "description": "Link to the proverb on /proverbs/{lang}/{id}.",
+            "example": "https://api.tasta.space/v1/proverbs/en/298"
+          },
+          "source": {
+            "type": "string",
+            "description": "URL of the public page its wording comes from (Wikiquote or Wiktionary).",
+            "example": "https://en.wikiquote.org/wiki/English_proverbs_(alphabetically_by_proverb)#A"
+          }
+        },
+        "required": [
+          "id",
+          "text",
+          "half",
+          "url",
+          "source"
+        ]
+      },
+      "Proverb": {
+        "type": "object",
+        "description": "One real, traditional proverb with its halves, join kind and source.",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Id within its language (1 to 227 for ro, 1 to 335 for en on 2026-10-23).",
+            "example": 88
+          },
+          "lang": {
+            "type": "string",
+            "description": "Language.",
+            "enum": [
+              "ro",
+              "en"
+            ],
+            "example": "ro"
+          },
+          "text": {
+            "type": "string",
+            "description": "The proverb, worded exactly as its source has it.",
+            "example": "Mielul blând suge la două oi."
+          },
+          "first": {
+            "type": "string",
+            "description": "Its first half, cut at the natural joint.",
+            "example": "Mielul blând"
+          },
+          "second": {
+            "type": "string",
+            "description": "Its second half.",
+            "example": "suge la două oi."
+          },
+          "join": {
+            "type": "string",
+            "description": "The join kind of the cut.",
+            "enum": [
+              "cine",
+              "ce",
+              "noun",
+              "plural",
+              "cond",
+              "imp",
+              "pair",
+              "verbless",
+              "decat",
+              "front",
+              "subject",
+              "who",
+              "condition",
+              "adverbial",
+              "than",
+              "there",
+              "imperative",
+              "the_more",
+              "as_so"
+            ],
+            "example": "noun"
+          },
+          "source": {
+            "type": "object",
+            "description": "Where the wording comes from.",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Source name.",
+                "example": "Wikiquote (ro)"
+              },
+              "url": {
+                "type": "string",
+                "description": "URL of the page with this wording.",
+                "example": "https://ro.wikiquote.org/wiki/Proverbe_rom%C3%A2ne%C8%99ti#M"
+              },
+              "licence": {
+                "type": "string",
+                "description": "Licence of the source.",
+                "example": "CC BY-SA 4.0"
+              }
+            },
+            "required": [
+              "name",
+              "url",
+              "licence"
+            ]
+          },
+          "url": {
+            "type": "string",
+            "description": "Link to this proverb.",
+            "example": "https://api.tasta.space/v1/proverbs/ro/88"
+          }
+        },
+        "required": [
+          "id",
+          "lang",
+          "text",
+          "first",
+          "second",
+          "join",
+          "source",
+          "url"
+        ]
+      },
+      "JoinKind": {
+        "type": "object",
+        "properties": {
+          "shape": {
+            "type": "string",
+            "description": "What the two halves of this kind look like.",
+            "example": "a singular subject, then its verb"
+          },
+          "count": {
+            "type": "integer",
+            "description": "How many proverbs have this join.",
+            "example": 118
+          }
+        },
+        "required": [
+          "shape",
+          "count"
+        ]
+      },
+      "Error": {
+        "type": "object",
+        "description": "The hub's error envelope.",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "description": "Stable machine-readable code (the hub's codes plus this API's own).",
+                "example": "not_found"
+              },
+              "message": {
+                "type": "string",
+                "description": "Human-readable message; may be a joke.",
+                "example": "No proverb 99999 in ro. Ids run from 1 to 227. As they say, you cannot find what was never written."
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ]
+          }
+        },
+        "required": [
+          "error"
+        ]
+      }
+    }
+  }
+}

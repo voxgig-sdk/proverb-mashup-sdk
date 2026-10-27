@@ -1,0 +1,72 @@
+<?php
+declare(strict_types=1);
+
+// ProverbMashup SDK utility registration
+
+require_once __DIR__ . '/../core/UtilityType.php';
+require_once __DIR__ . '/Clean.php';
+require_once __DIR__ . '/Done.php';
+require_once __DIR__ . '/MakeError.php';
+require_once __DIR__ . '/FeatureAdd.php';
+require_once __DIR__ . '/FeatureHook.php';
+require_once __DIR__ . '/FeatureInit.php';
+require_once __DIR__ . '/Fetcher.php';
+require_once __DIR__ . '/MakeFetchDef.php';
+require_once __DIR__ . '/MakeContext.php';
+require_once __DIR__ . '/MakeOptions.php';
+require_once __DIR__ . '/MakeRequest.php';
+require_once __DIR__ . '/MakeResponse.php';
+require_once __DIR__ . '/MakeResult.php';
+require_once __DIR__ . '/MakePoint.php';
+require_once __DIR__ . '/MakeSpec.php';
+require_once __DIR__ . '/MakeUrl.php';
+require_once __DIR__ . '/Param.php';
+require_once __DIR__ . '/PrepareAuth.php';
+require_once __DIR__ . '/PrepareBody.php';
+require_once __DIR__ . '/Graphql.php';
+require_once __DIR__ . '/PrepareHeaders.php';
+require_once __DIR__ . '/PrepareMethod.php';
+require_once __DIR__ . '/PrepareParams.php';
+require_once __DIR__ . '/PreparePath.php';
+require_once __DIR__ . '/PrepareQuery.php';
+require_once __DIR__ . '/ResultBasic.php';
+require_once __DIR__ . '/ResultBody.php';
+require_once __DIR__ . '/ResultHeaders.php';
+require_once __DIR__ . '/TransformRequest.php';
+require_once __DIR__ . '/TransformResponse.php';
+
+ProverbMashupUtility::setRegistrar(function (ProverbMashupUtility $u): void {
+    $u->clean = [ProverbMashupClean::class, 'call'];
+    $u->clean_add = [ProverbMashupClean::class, 'add'];
+    $u->clean_explain = [ProverbMashupDone::class, 'clean_explain'];
+    $u->done = [ProverbMashupDone::class, 'call'];
+    $u->make_error = [ProverbMashupMakeError::class, 'call'];
+    $u->feature_add = [ProverbMashupFeatureAdd::class, 'call'];
+    $u->feature_hook = [ProverbMashupFeatureHook::class, 'call'];
+    $u->feature_init = [ProverbMashupFeatureInit::class, 'call'];
+    $u->fetcher = [ProverbMashupFetcher::class, 'call'];
+    $u->make_fetch_def = [ProverbMashupMakeFetchDef::class, 'call'];
+    $u->make_context = [ProverbMashupMakeContext::class, 'call'];
+    $u->make_options = [ProverbMashupMakeOptions::class, 'call'];
+    $u->make_request = [ProverbMashupMakeRequest::class, 'call'];
+    $u->make_response = [ProverbMashupMakeResponse::class, 'call'];
+    $u->make_result = [ProverbMashupMakeResult::class, 'call'];
+    $u->make_point = [ProverbMashupMakePoint::class, 'call'];
+    $u->make_spec = [ProverbMashupMakeSpec::class, 'call'];
+    $u->make_url = [ProverbMashupMakeUrl::class, 'call'];
+    $u->param = [ProverbMashupParam::class, 'call'];
+    $u->prepare_auth = [ProverbMashupPrepareAuth::class, 'call'];
+    $u->prepare_body = [ProverbMashupPrepareBody::class, 'call'];
+    $u->prepare_headers = [ProverbMashupPrepareHeaders::class, 'call'];
+    $u->prepare_method = [ProverbMashupPrepareMethod::class, 'call'];
+    $u->prepare_params = [ProverbMashupPrepareParams::class, 'call'];
+    $u->prepare_path = [ProverbMashupPreparePath::class, 'call'];
+    $u->prepare_query = [ProverbMashupPrepareQuery::class, 'call'];
+    $u->graphql_body = [ProverbMashupGraphql::class, 'body'];
+    $u->graphql_errors = [ProverbMashupGraphql::class, 'errors'];
+    $u->result_basic = [ProverbMashupResultBasic::class, 'call'];
+    $u->result_body = [ProverbMashupResultBody::class, 'call'];
+    $u->result_headers = [ProverbMashupResultHeaders::class, 'call'];
+    $u->transform_request = [ProverbMashupTransformRequest::class, 'call'];
+    $u->transform_response = [ProverbMashupTransformResponse::class, 'call'];
+});

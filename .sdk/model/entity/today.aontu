@@ -1,0 +1,114 @@
+# Entity: today
+
+main: kit: entity: today: {
+
+  alias: field: {}
+
+  fields: {
+    card: {
+      h: "Card"
+      n: "card"
+      r: true
+      sh: "Link to a 1200x630 share card (PNG, or format=svg)."
+      t: "`$STRING`"
+    }
+    from: {
+      h: "From"
+      n: "from"
+      r: true
+      sh: "The two real proverbs it came from: the one that gave the first half, then the one that gave the second."
+      t: "`$ARRAY`"
+    }
+    halves: {
+      h: "Halves"
+      n: "halves"
+      r: true
+      sh: "The two halves, first then second."
+      t: "`$ARRAY`"
+    }
+    join: {
+      h: "Join"
+      n: "join"
+      r: true
+      sh: "The join kind both halves share (see /proverbs meta.joins)."
+      t: "`$STRING`"
+    }
+    lang: {
+      h: "Lang"
+      n: "lang"
+      r: true
+      sh: "Language of the mashup."
+      t: "`$STRING`"
+    }
+    mashup: {
+      h: "Mashup"
+      n: "mashup"
+      r: true
+      sh: "The mashup: the two halves joined by one space."
+      t: "`$STRING`"
+    }
+    permalink: {
+      h: "Permalink"
+      n: "permalink"
+      r: true
+      sh: "Link that reproduces this mashup."
+      t: "`$STRING`"
+    }
+    seed: {
+      h: "Seed"
+      n: "seed"
+      r: true
+      sh: "The seed; the same seed and lang always give the same mashup."
+      t: "`$STRING`"
+    }
+  }
+
+  name: "today"
+  op: {
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /proverbs/today"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                ex: "en"
+                k: "query"
+                n: "lang"
+                or: "lang"
+                r: false
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/proverbs/today"
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "proverbs"
+            }
+            {
+              lit: "today"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.data`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

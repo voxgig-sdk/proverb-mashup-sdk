@@ -1,0 +1,119 @@
+# Entity: random
+
+main: kit: entity: random: {
+
+  alias: field: {}
+
+  fields: {
+    first: {
+      h: "First"
+      n: "first"
+      r: true
+      sh: "Its first half, cut at the natural joint."
+      t: "`$STRING`"
+    }
+    id: {
+      h: "Id"
+      n: "id"
+      r: true
+      sh: "Id within its language (1 to 227 for ro, 1 to 335 for en on 2026-10-23)."
+      t: "`$INTEGER`"
+    }
+    join: {
+      h: "Join"
+      n: "join"
+      r: true
+      sh: "The join kind of the cut."
+      t: "`$STRING`"
+    }
+    lang: {
+      h: "Lang"
+      n: "lang"
+      r: true
+      sh: "Language."
+      t: "`$STRING`"
+    }
+    second: {
+      h: "Second"
+      n: "second"
+      r: true
+      sh: "Its second half."
+      t: "`$STRING`"
+    }
+    source: {
+      h: "Source"
+      n: "source"
+      r: true
+      sh: "Where the wording comes from."
+      t: "`$OBJECT`"
+    }
+    text: {
+      h: "Text"
+      n: "text"
+      r: true
+      sh: "The proverb, worded exactly as its source has it."
+      t: "`$STRING`"
+    }
+    url: {
+      h: "Url"
+      n: "url"
+      r: true
+      sh: "Link to this proverb."
+      t: "`$STRING`"
+    }
+  }
+
+  id: {
+    field: "id"
+    name: "id"
+  }
+
+  name: "random"
+  op: {
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /proverbs/random"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                ex: "en"
+                k: "query"
+                n: "lang"
+                or: "lang"
+                r: false
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/proverbs/random"
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "proverbs"
+            }
+            {
+              lit: "random"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.data`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

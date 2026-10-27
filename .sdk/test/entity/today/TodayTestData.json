@@ -1,0 +1,60 @@
+{
+  "existing": {
+    "today": {
+      "TODAY00": {
+        "card": "s50",
+        "from": [],
+        "halves": [],
+        "join": "s53",
+        "lang": "s54",
+        "mashup": "s55",
+        "permalink": "s56",
+        "seed": "s57",
+        "id": "TODAY00"
+      },
+      "TODAY01": {
+        "card": "sa0",
+        "from": [],
+        "halves": [],
+        "join": "sa3",
+        "lang": "sa4",
+        "mashup": "sa5",
+        "permalink": "sa6",
+        "seed": "sa7",
+        "id": "TODAY01"
+      },
+      "TODAY02": {
+        "card": "sf0",
+        "from": [],
+        "halves": [],
+        "join": "sf3",
+        "lang": "sf4",
+        "mashup": "sf5",
+        "permalink": "sf6",
+        "seed": "sf7",
+        "id": "TODAY02"
+      }
+    }
+  },
+  "new": {
+    "today": {
+      "today_ref01": {
+        "card": "s140",
+        "from": [],
+        "halves": [],
+        "join": "s143",
+        "lang": "s144",
+        "mashup": "s145",
+        "permalink": "s146",
+        "seed": "s147"
+      }
+    }
+  },
+  "requests": {
+    "GET /proverbs/today": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

@@ -1,0 +1,28 @@
+# BasicRandomFlow
+
+main: kit: flow: BasicRandomFlow:
+{
+  entity: "random",
+  kind: "basic",
+  name: "BasicRandomFlow",
+  step: [
+    {
+      i: {
+        ref: "random_ref01",
+        srcdatavar: "random_ref01_data",
+        suffix: "_dt0"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-random_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicRandomFlow"
+}

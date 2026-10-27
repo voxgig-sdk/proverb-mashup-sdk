@@ -1,0 +1,28 @@
+# BasicMashupFlow
+
+main: kit: flow: BasicMashupFlow:
+{
+  entity: "mashup",
+  kind: "basic",
+  name: "BasicMashupFlow",
+  step: [
+    {
+      i: {
+        ref: "mashup_ref01",
+        srcdatavar: "mashup_ref01_data",
+        suffix: "_dt0"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-mashup_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicMashupFlow"
+}

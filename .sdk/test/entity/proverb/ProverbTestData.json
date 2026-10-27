@@ -1,0 +1,65 @@
+{
+  "existing": {
+    "proverb": {
+      "PROVERB00": {
+        "first": "s5a",
+        "id": "PROVERB00",
+        "join": "s5c",
+        "lang": "s5d",
+        "proverb-mashup_id": "PROVERB-MASHUP01",
+        "second": "s5f",
+        "source": {},
+        "text": "s61",
+        "url": "s62"
+      },
+      "PROVERB01": {
+        "first": "sb4",
+        "id": "PROVERB01",
+        "join": "sb6",
+        "lang": "sb7",
+        "proverb-mashup_id": "PROVERB-MASHUP01",
+        "second": "sb9",
+        "source": {},
+        "text": "sbb",
+        "url": "sbc"
+      },
+      "PROVERB02": {
+        "first": "s10e",
+        "id": "PROVERB02",
+        "join": "s110",
+        "lang": "s111",
+        "proverb-mashup_id": "PROVERB-MASHUP01",
+        "second": "s113",
+        "source": {},
+        "text": "s115",
+        "url": "s116"
+      }
+    }
+  },
+  "new": {
+    "proverb": {
+      "proverb_ref01": {
+        "first": "s168",
+        "join": "s16a",
+        "lang": "s16b",
+        "proverb-mashup_id": "PROVERB-MASHUP01",
+        "second": "s16d",
+        "source": {},
+        "text": "s16f",
+        "url": "s170"
+      }
+    }
+  },
+  "requests": {
+    "GET /proverbs": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /proverbs/{lang}/{id}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

@@ -1,0 +1,45 @@
+# BasicProverbFlow
+
+main: kit: flow: BasicProverbFlow:
+{
+  entity: "proverb",
+  kind: "basic",
+  name: "BasicProverbFlow",
+  step: [
+    {
+      o: "list",
+      v: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "proverb_ref01"
+          }
+        }
+      ]
+    }
+
+    {
+      i: {
+        ref: "proverb_ref01",
+        srcdatavar: "proverb_ref01_data",
+        suffix: "_dt0"
+      }
+
+      m: {
+        id: "proverb01",
+        lang: "lang01"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-proverb_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicProverbFlow"
+}

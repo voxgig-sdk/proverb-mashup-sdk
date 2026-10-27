@@ -1,0 +1,28 @@
+# BasicTodayFlow
+
+main: kit: flow: BasicTodayFlow:
+{
+  entity: "today",
+  kind: "basic",
+  name: "BasicTodayFlow",
+  step: [
+    {
+      i: {
+        ref: "today_ref01",
+        srcdatavar: "today_ref01_data",
+        suffix: "_dt0"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-today_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicTodayFlow"
+}

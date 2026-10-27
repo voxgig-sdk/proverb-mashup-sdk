@@ -1,0 +1,56 @@
+{
+  "existing": {
+    "random": {
+      "RANDOM00": {
+        "first": "s50",
+        "id": "RANDOM00",
+        "join": "s52",
+        "lang": "s53",
+        "second": "s54",
+        "source": {},
+        "text": "s56",
+        "url": "s57"
+      },
+      "RANDOM01": {
+        "first": "sa0",
+        "id": "RANDOM01",
+        "join": "sa2",
+        "lang": "sa3",
+        "second": "sa4",
+        "source": {},
+        "text": "sa6",
+        "url": "sa7"
+      },
+      "RANDOM02": {
+        "first": "sf0",
+        "id": "RANDOM02",
+        "join": "sf2",
+        "lang": "sf3",
+        "second": "sf4",
+        "source": {},
+        "text": "sf6",
+        "url": "sf7"
+      }
+    }
+  },
+  "new": {
+    "random": {
+      "random_ref01": {
+        "first": "s140",
+        "join": "s142",
+        "lang": "s143",
+        "second": "s144",
+        "source": {},
+        "text": "s146",
+        "url": "s147"
+      }
+    }
+  },
+  "requests": {
+    "GET /proverbs/random": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

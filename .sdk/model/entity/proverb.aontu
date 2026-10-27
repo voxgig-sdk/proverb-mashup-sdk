@@ -1,0 +1,221 @@
+# Entity: proverb
+
+main: kit: entity: proverb: {
+
+  alias: field: {}
+
+  alias: {
+    field: {
+      "proverb-mashup_id": "id"
+    }
+  }
+
+  fields: {
+    first: {
+      h: "First"
+      n: "first"
+      r: true
+      sh: "Its first half, cut at the natural joint."
+      t: "`$STRING`"
+    }
+    id: {
+      h: "Id"
+      n: "id"
+      r: true
+      sh: "Id within its language (1 to 227 for ro, 1 to 335 for en on 2026-10-23)."
+      t: "`$STRING`"
+    }
+    join: {
+      h: "Join"
+      n: "join"
+      r: true
+      sh: "The join kind of the cut."
+      t: "`$STRING`"
+    }
+    lang: {
+      h: "Lang"
+      n: "lang"
+      r: true
+      sh: "Language."
+      t: "`$STRING`"
+    }
+    "proverb-mashup_id": {
+      h: "Proverb Mashup Id"
+      n: "proverb-mashup_id"
+      r: true
+      sh: "Id within its language (1 to 227 for ro, 1 to 335 for en on 2026-10-23)."
+      t: "`$INTEGER`"
+    }
+    second: {
+      h: "Second"
+      n: "second"
+      r: true
+      sh: "Its second half."
+      t: "`$STRING`"
+    }
+    source: {
+      h: "Source"
+      n: "source"
+      r: true
+      sh: "Where the wording comes from."
+      t: "`$OBJECT`"
+    }
+    text: {
+      h: "Text"
+      n: "text"
+      r: true
+      sh: "The proverb, worded exactly as its source has it."
+      t: "`$STRING`"
+    }
+    url: {
+      h: "Url"
+      n: "url"
+      r: true
+      sh: "Link to this proverb."
+      t: "`$STRING`"
+    }
+  }
+
+  id: {
+    field: "id"
+    from: {
+      id: "id"
+      lang: "lang"
+    }
+    name: "id"
+    parts: [
+      "lang"
+      "id"
+    ]
+    sep: "/"
+  }
+
+  name: "proverb"
+  op: {
+    list: {
+      name: "list"
+      points: [
+        {
+          co: {
+            id: "GET /proverbs"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                ex: "cine"
+                k: "query"
+                n: "join"
+                or: "join"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: "en"
+                k: "query"
+                n: "lang"
+                or: "lang"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: 2
+                k: "query"
+                n: "page"
+                or: "page"
+                r: false
+                t: "`$INTEGER`"
+              }
+              {
+                ex: 20
+                k: "query"
+                n: "per_page"
+                or: "per_page"
+                r: false
+                t: "`$INTEGER`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/proverbs"
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "proverbs"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.data`"
+          }
+        }
+      ]
+    }
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /proverbs/{lang}/{id}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                ex: 88
+                k: "param"
+                n: "id"
+                or: "id"
+                r: true
+                t: "`$INTEGER`"
+              }
+              {
+                ex: "ro"
+                k: "param"
+                n: "lang"
+                or: "lang"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/proverbs/{lang}/{id}"
+          q: {
+            exist: [
+              "id"
+              "lang"
+            ]
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "proverbs"
+            }
+            {
+              var: "lang"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.data`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

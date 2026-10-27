@@ -1,0 +1,26 @@
+{
+  "files": [
+    "SUMMARY.md"
+  ],
+  "config": ".sdk/doc/qa/vale.ini",
+  "routes": {},
+  "quoted": {
+    "SUMMARY.md": [
+      "> Mashups made by gluing the first half of one real proverb to the second half of another (halves only meet halves of the same join kind), plus the 227 Romanian and 335 English real proverbs themselves, each with its source, from the `api.tasta.space` hub. Proverb wording comes from Wikiquote and Wiktionary under CC BY-SA 4.0. GET only, JSON in a &#123;&quot;data&quot;: ...&#125; envelope, no key needed (anonymous callers get 30 requests a minute and 1,000 a day per IP, shared across every API on the hub).\n>\n> Sources: the documentation page https://api.tasta.space/proverbs and the hub rules at https://api.tasta.space/docs, with every modelled endpoint probed live on 2026-10-23 (random and seeded mashups, today&#39;s mashup with and without lang, a random proverb, ro/88, a 404 id, the list filtered by lang and by join kind with paging).\n>\n> Not modelled: format=text (one plain-text line, on mashup, today, random and &#123;lang&#125;/&#123;id&#125;) and /proverbs/mashup/card, which returns a PNG or SVG image rather than JSON.",
+      "A page of proverbs.",
+      "Id within its language (1 to 227 for ro, 1 to 335 for en on 2026-10-23).",
+      "Its first half, cut at the natural joint.",
+      "Its second half.",
+      "Language of the mashup.",
+      "Language.",
+      "Link to a 1200x630 share card (PNG, or format=svg). Not a JSON endpoint.",
+      "The join kind both halves share (see /proverbs meta.joins).",
+      "The join kind of the cut.",
+      "The mashup",
+      "The proverb",
+      "The two halves, first then second.",
+      "The two real proverbs it came from: the one that gave the first half, then the one that gave the second.",
+      "Today&#39;s mashup"
+    ]
+  }
+}

@@ -1,0 +1,25 @@
+# API Information
+
+
+main: {
+  kit: {
+    info: {
+      auth: false
+      description: `Mashups made by gluing the first half of one real proverb to the second half of another (halves only meet halves of the same join kind), plus the 227 Romanian and 335 English real proverbs themselves, each with its source, from the api.tasta.space hub. Proverb wording comes from Wikiquote and Wiktionary under CC BY-SA 4.0. GET only, JSON in a {"data": ...} envelope, no key needed (anonymous callers get 30 requests a minute and 1,000 a day per IP, shared across every API on the hub).
+
+Sources: the documentation page https://api.tasta.space/proverbs and the hub rules at https://api.tasta.space/docs, with every modelled endpoint probed live on 2026-10-23 (random and seeded mashups, today's mashup with and without lang, a random proverb, ro/88, a 404 id, the list filtered by lang and by join kind with paging).
+
+Not modelled: format=text (one plain-text line, on mashup, today, random and {lang}/{id}) and /proverbs/mashup/card, which returns a PNG or SVG image rather than JSON.`
+      servers: [
+        {
+          url: "https://api.tasta.space/v1"
+        }
+      ]
+      summary: "Mashups made by gluing the first half of one real proverb to the second half of another (halves only meet halves of the same join kind), plus the 227 Romanian and 335 English real proverbs themselves, each with its source, from the…"
+      title: "Proverb Mashup"
+      version: "1.0.0"
+      website: "https://api.tasta.space/proverbs"
+    }
+  }
+}
+
